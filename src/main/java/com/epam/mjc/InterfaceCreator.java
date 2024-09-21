@@ -1,5 +1,7 @@
 package com.epam.mjc;
 
+import java.util.ArrayList;
+import java.util.HashMap;
 import java.util.List;
 import java.util.Map;
 import java.util.function.BiFunction;
@@ -11,22 +13,52 @@ import java.util.function.Supplier;
 public class InterfaceCreator {
 
     public Predicate<List<String>> isValuesStartWithUpperCase() {
-        throw new UnsupportedOperationException("You should implement this method.");
+        return str -> str.get(0).matches("[A-Z]+");
     }
 
     public Consumer<List<Integer>> addEvenValuesAtTheEnd() {
-        throw new UnsupportedOperationException("You should implement this method.");
+        List<Integer> evens = new ArrayList<>();
+        return num -> {
+            for(var val: num) {
+                if (val % 2 == 0) {
+                    evens.add(val);
+                }
+            }
+            num.addAll(evens);
+        };
     }
 
     public Supplier<List<String>> filterCollection(List<String> values) {
-        throw new UnsupportedOperationException("You should implement this method.");
+        List<String> results = new ArrayList<>();
+        return () -> {
+            for(String val: values) {
+                var startValidation = Character.isUpperCase(val.charAt(0));
+                var endValidation = val.endsWith(".");
+                var lengthValidation = val.split("\\s+").length > 3;
+
+                if (startValidation && endValidation && lengthValidation) {
+                    results.add(val);
+                }
+            }
+            return results;
+        };
     }
 
     public Function<List<String>, Map<String, Integer>> stringSize() {
-        throw new UnsupportedOperationException("You should implement this method.");
+        return val -> {
+            Map<String, Integer> map = new HashMap<>();
+            for (String str: val) {
+                map.put(str, str.length());
+            }
+            return map;
+        };
     }
 
     public BiFunction<List<Integer>, List<Integer>, List<Integer>> concatList() {
-        throw new UnsupportedOperationException("You should implement this method.");
+        return (firstList, secondList) -> {
+            List<Integer> list = new ArrayList<>(firstList);
+            list.addAll(secondList);
+            return list;
+        };
     }
 }
